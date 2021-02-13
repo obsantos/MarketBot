@@ -15,7 +15,22 @@ YAHOO_FINANCE_URL = "https://query1.finance.yahoo.com/v7/finance/quote?formatted
 def query_symbol_details(symbol):
     """Given a stock symbol query Yahoo Finance for details"""
     response = requests.get(YAHOO_FINANCE_URL.format(symbol)).json()
-    print(response)
+    return response
+
+def print_symbol_details(symbol,details):
+    """Prints the symbol\'s details"""
+    try:
+        result = details['quoteResponse']['result'][0]
+        name = result['longName']
+        previous = result['regularMarketPreviousClose']['fmt']
+        current = result['regularMarketPrice']['fmt']
+        change_percent = result['regularMarketChangePercent']['fmt']
+        change = result['regularMarketChange']['fmt']
+        print(name + " (" + symbol + ")")
+        print("Price: " + current)
+        print("Previous: " + previous + " - Change: " + change + " (" + change_percent + ")")
+    except ValueError:
+        print("Error parsing the JSON response")
 
 def main():
     parser = argparse.ArgumentParser(description='Script that queries Yahoo Finance to retrieve a symbol\'s price')
@@ -26,7 +41,9 @@ def main():
         parser.print_help()
         sys.exit(1)
 
-    query_symbol_details(args.symbol)
+    json = query_symbol_details(args.symbol)
+    print_symbol_details(args.symbol, json)
+    
 
 if __name__ == '__main__':
     main()
