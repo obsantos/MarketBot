@@ -29,6 +29,13 @@ Steps on how to create your Slack App can be found [here](https://github.com/sla
 
 After it's all set up you can add the bot to a channel in your slack workspace.
 
+To use it just type any symbol prefixed by the `$` sign and the bot will reply with the stock information. (i.e `$TSLA`, `$SBUX`)
+
+Like this:
+
+<img src="images/tsla.png"/>
+<img src="imagess/sbux.png"/>
+
 ### Hosting bot locally
 
 Export the token and signing keys as environment variables:

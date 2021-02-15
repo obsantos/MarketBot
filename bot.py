@@ -84,7 +84,7 @@ def send_price_msg(channel_id, details):
             ]
         }
     payload = get_message_payload(channel_id, msg)
-    response = client.chat_postMessage(**payload)
+    client.chat_postMessage(**payload)
 
 @slack_events_adapter.on("message")
 def message(payload):
