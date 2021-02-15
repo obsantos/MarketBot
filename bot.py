@@ -22,17 +22,17 @@ slack_events_adapter = SlackEventAdapter(os.environ['SLACK_SIGNING_SECRET'], "/s
 # Initialize a Web API client
 client = WebClient(token=os.environ['SLACK_BOT_TOKEN'])
 
-def get_message_payload(msg):
+def get_message_payload(channel_id, msg):
     return {
         "ts": "",
-        "channel": "#bots",
+        "channel": channel_id,
         "username": "Market Bot",
         "attachments": [ 
             msg
         ]
     }
 
-def send_price_msg(details):
+def send_price_msg(channel_id, details):
     """Sends price message to the channel"""    
     if details['change'].startswith('-'):
         trend = ":chart_with_downwards_trend:"
@@ -83,7 +83,7 @@ def send_price_msg(details):
                 }
             ]
         }
-    payload = get_message_payload(msg)
+    payload = get_message_payload(channel_id, msg)
     response = client.chat_postMessage(**payload)
 
 @slack_events_adapter.on("message")
@@ -91,12 +91,13 @@ def message(payload):
     """Parse channel messages looking for stock symbols"""
     event = payload.get("event", {})
     text = event.get("text")
+    channel_id = event.get("channel")
 
     if text:
         symbols = re.findall(r'\$\b[a-zA-Z]+\b', text)
         for symbol in symbols:            
             details = stock.query_symbol_details(symbol[1:])
-            send_price_msg(details)
+            send_price_msg(channel_id, details)
 
 if __name__ == "__main__":
     logger = logging.getLogger()
