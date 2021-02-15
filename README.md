@@ -33,8 +33,8 @@ To use it just type any symbol prefixed by the `$` sign and the bot will reply w
 
 Like this:
 
-<img src="images/tsla.png"/>
-<img src="imagess/sbux.png"/>
+<img src="images/tsla.png" width="250"/>
+<img src="images/sbux.png" width="250"/>
 
 ### Hosting bot locally
 
