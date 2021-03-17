@@ -1,6 +1,14 @@
 # MarketBot
 Simplest stock market script & bot for Slack
 
+## Instalation
+
+To install dependencies needed run:
+
+```
+$ pip install -r requirements.txt
+```
+
 ## Script usage
 
 ```
