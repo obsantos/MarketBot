@@ -22,7 +22,20 @@ slack_events_adapter = SlackEventAdapter(os.environ['SLACK_SIGNING_SECRET'], "/s
 # Initialize a Web API client
 client = WebClient(token=os.environ['SLACK_BOT_TOKEN'])
 
+# Timestamp of the latest message processed
+# NOTE: Mainly for heroku since the service dies after 1h on the free tier and when waking up it sometimes it gets older messages
+last_processed = 0
+
+def check_processed(ts):
+    """Checks if a timestamp of a message is newer than the last processed"""
+    global last_processed
+    if ts > last_processed:
+        last_processed = ts
+        return True
+    return False
+
 def get_message_payload(channel_id, msg):
+    """Gets the message payload to be sent in the post message api"""
     return {
         "ts": "",
         "channel": channel_id,
@@ -92,8 +105,9 @@ def message(payload):
     event = payload.get("event", {})
     text = event.get("text")
     channel_id = event.get("channel")
+    ts = payload.get("event_time")
 
-    if text:
+    if check_processed(ts) and text:
         symbols = re.findall(r'\$\b[a-zA-Z]+\b', text)
         for symbol in symbols:            
             details = stock.query_symbol_details(symbol[1:])
