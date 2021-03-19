@@ -45,6 +45,14 @@ def get_message_payload(channel_id, msg):
         ]
     }
 
+def sanitize_message(msg):
+    """Sanitizes the message removing possible http link formating"""
+    http_prefix = "$<http://"
+    if msg.startswith(http_prefix):
+        index = msg.find("|")
+        return "$" + msg[len(http_prefix):index]
+    return msg
+
 def send_price_msg(channel_id, details):
     """Sends price message to the channel"""    
     if details['change'].startswith('-'):
@@ -103,12 +111,12 @@ def send_price_msg(channel_id, details):
 def message(payload):
     """Parse channel messages looking for stock symbols"""
     event = payload.get("event", {})
-    text = event.get("text")
+    text = sanitize_message(event.get("text"))
     channel_id = event.get("channel")
     ts = payload.get("event_time")
 
     if check_processed(ts) and text:
-        symbols = re.findall(r'\$\b[a-zA-Z]+\b', text)
+        symbols = re.findall(r'\$\b[a-zA-Z.-]+\b', text)
         for symbol in symbols:            
             details = stock.query_symbol_details(symbol[1:])
             send_price_msg(channel_id, details)
