@@ -72,29 +72,33 @@ def send_price_msg(channel_id, details):
                 {
                     "type": "header",
                     "text": {
-                        "type": "mrkdwn",
+                        "type": "plain_text",
                         "text": "{0} ({1})  {2}".format(details['name'], details['symbol'], indicator),
                         "emoji": True
                     }
                 },
                 {
                     "type": "section",
-                    "text": {
-                        "type": "mrkdwn",
-                        "text": "*Current Price:* ${0}".format(details['current'])
-                    },
                     "fields": [
+                        {
+                            "type": "mrkdwn",
+                            "text": "*Current Price:*"
+                        },
+                        {
+                            "type": "plain_text",
+                            "text": "${0}".format(details['current'])
+                        },
                         {
                             "type": "mrkdwn",
                             "text": "*Previous Close Price:*"
                         },
                         {
-                            "type": "mrkdwn",
-                            "text": "*Change:*"
-                        },
-                        {
                             "type": "plain_text",
                             "text": "${0}".format(details['previous'])
+                        },
+                        {
+                            "type": "mrkdwn",
+                            "text": "*Change:*"
                         },
                         {
                             "type": "plain_text",
