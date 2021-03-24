@@ -72,7 +72,7 @@ def send_price_msg(channel_id, details):
                 {
                     "type": "header",
                     "text": {
-                        "type": "plain_text",
+                        "type": "mrkdwn",
                         "text": "{0} ({1})  {2}".format(details['name'], details['symbol'], indicator),
                         "emoji": True
                     }
@@ -99,6 +99,15 @@ def send_price_msg(channel_id, details):
                         {
                             "type": "plain_text",
                             "text": "{0} ({1}) {2}".format(details['change'], details['percent'], trend)
+                        }
+                    ]
+                },
+                {
+                    "type": "context",
+                    "elements": [
+                        {
+                            "type": "mrkdwn",
+                            "text": "More information <https://finance.yahoo.com/quote/{0}|here>".format(details['symbol'])
                         }
                     ]
                 }
