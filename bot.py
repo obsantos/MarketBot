@@ -85,7 +85,7 @@ def send_price_msg(channel_id, details):
                     "type": "header",
                     "text": {
                         "type": "plain_text",
-                        "text": "{0} ({1})  {2}".format(details['name'], details['symbol'], indicator),
+                        "text": "{0} ({1})  {2}".format(details['name'], details['symbol'].upper(), indicator),
                         "emoji": True
                     }
                 },
