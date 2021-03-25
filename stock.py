@@ -43,7 +43,6 @@ def get_price_for_market_state(state, result):
 def query_symbol_details(symbol):
     """Given a stock symbol query Yahoo Finance for details and returns a simplified object"""
     response = requests.get(YAHOO_FINANCE_URL.format(symbol, FIELDS)).json()
-    print(response)
     try:
         result = response['quoteResponse']['result'][0]
         name = result['longName']
