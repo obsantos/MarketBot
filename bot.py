@@ -55,16 +55,28 @@ def sanitize_message(msg):
 
 def send_price_msg(channel_id, details):
     """Sends price message to the channel"""    
-    if details['change'].startswith('-'):
+    if details['price']['change'].startswith('-'):
         trend = ":chart_with_downwards_trend:"
         indicator = ":red_circle:"
         color = "#FF0000"
-        details['change'] = details['change'].replace("-", "-$")
+        details['price']['change'] = details['price']['change'].replace("-", "-$")
     else:
         trend = ":chart_with_upwards_trend:"
         indicator = ":large_green_circle:"
         color = "#00FF00"
-        details['change'] = "$" + details['change']
+        details['price']['change'] = "$" + details['price']['change']
+
+    # Override color, emojis and some text if we are in pre/post market
+    if details['state'] == stock.MARKET_STATE_PRE:
+        color = "#FFFF00"
+        indicator = ":hatching_chick:"
+        current_text = "Pre Market Price"
+    elif details['state'] == stock.MARKET_STATE_POST:
+        color = "#777777"
+        indicator = ":new_moon_with_face:"
+        current_text = "After Hours Price"
+    else:
+        current_text = "Current Price"
 
     msg = {
             "color": color,
@@ -82,11 +94,11 @@ def send_price_msg(channel_id, details):
                     "fields": [
                         {
                             "type": "mrkdwn",
-                            "text": "*Current Price:*"
+                            "text": "*{0}:*".format(current_text)
                         },
                         {
                             "type": "plain_text",
-                            "text": "${0}".format(details['current'])
+                            "text": "${0}".format(details['price']['current'])
                         },
                         {
                             "type": "mrkdwn",
@@ -94,7 +106,7 @@ def send_price_msg(channel_id, details):
                         },
                         {
                             "type": "plain_text",
-                            "text": "${0}".format(details['previous'])
+                            "text": "${0}".format(details['price']['previous'])
                         },
                         {
                             "type": "mrkdwn",
@@ -102,7 +114,7 @@ def send_price_msg(channel_id, details):
                         },
                         {
                             "type": "plain_text",
-                            "text": "{0} ({1}) {2}".format(details['change'], details['percent'], trend)
+                            "text": "{0} ({1}) {2}".format(details['price']['change'], details['price']['percent'], trend)
                         }
                     ]
                 },
