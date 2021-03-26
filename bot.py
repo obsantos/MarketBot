@@ -75,7 +75,7 @@ def send_price_msg(channel_id, details):
         color = "#777777"
         indicator = ":new_moon_with_face:"
         current_text = "After Hours Price"
-    elif details['state'] == stock.MARKET_STATE_POST:
+    elif details['state'] == stock.MARKET_STATE_NIGHT:
         color = "#777777"
         indicator = ":sleeping:"
         current_text = "After Hours Closing Price"
