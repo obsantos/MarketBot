@@ -71,17 +71,19 @@ def send_price_msg(channel_id, details):
         color = "#FFFF00"
         indicator = ":hatching_chick:"
         current_text = "Pre Market Price"
+        previous_text = "Market Hours Closing Price"
     elif details['state'] == stock.MARKET_STATE_POST:
         color = "#777777"
         indicator = ":new_moon_with_face:"
         current_text = "After Hours Price"
+        previous_text = "Market Hours Closing Price"
     elif details['state'] == stock.MARKET_STATE_NIGHT:
         color = "#777777"
         indicator = ":sleeping:"
         current_text = "After Hours Closing Price"
         previous_text = "Market Hours Closing Price"
     else:
-        current_text = "Current Price"
+        current_text = "Market Price"
         previous_text = "Previous Close Price"
 
     msg = {
