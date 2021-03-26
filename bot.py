@@ -64,27 +64,27 @@ def send_price_msg(channel_id, details):
         trend = ":chart_with_upwards_trend:"
         indicator = ":large_green_circle:"
         color = "#00FF00"
-        details['price']['change'] = "$" + details['price']['change']
+        details['price']['change'] = "+$" + details['price']['change']
 
     # Override color, emojis and some text if we are in pre/post market
     if details['state'] == stock.MARKET_STATE_PRE:
         color = "#FFFF00"
         indicator = ":hatching_chick:"
-        current_text = "Pre Market Price"
-        previous_text = "Market Hours Closing Price"
+        current_text = "Pre-Market price"
+        previous_text = "Market close price"
     elif details['state'] == stock.MARKET_STATE_POST:
         color = "#777777"
         indicator = ":new_moon_with_face:"
-        current_text = "After Hours Price"
-        previous_text = "Market Hours Closing Price"
+        current_text = "After Hours price"
+        previous_text = "Market close price"
     elif details['state'] == stock.MARKET_STATE_NIGHT:
         color = "#777777"
         indicator = ":sleeping:"
-        current_text = "After Hours Closing Price"
-        previous_text = "Market Hours Closing Price"
+        current_text = "After Hours close price"
+        previous_text = "Market close price"
     else:
-        current_text = "Market Price"
-        previous_text = "Previous Close Price"
+        current_text = "Market price"
+        previous_text = "Previous close price"
 
     msg = {
             "color": color,
