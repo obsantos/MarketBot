@@ -14,6 +14,7 @@ FIELDS = "regularMarketChangePercent%2CregularMarketChange%2CregularMarketPrice%
 MARKET_STATE_REG = "REGULAR"
 MARKET_STATE_PRE = "PRE"
 MARKET_STATE_POST = "POST"
+MARKET_STATE_NIGHT = "POSTPOST"
 
 def get_price_for_market_state(state, result):
     """Returns the price for the current state of the market"""
@@ -24,7 +25,7 @@ def get_price_for_market_state(state, result):
             "change": result['preMarketChange']['fmt'],
             "percent": result['preMarketChangePercent']['fmt']
         }
-    elif state == MARKET_STATE_POST:
+    elif state == MARKET_STATE_POST or state == MARKET_STATE_NIGHT:
         return {
             "current": result['postMarketPrice']['fmt'],
             "previous": result['regularMarketPrice']['fmt'],
