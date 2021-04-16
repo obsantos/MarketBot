@@ -46,7 +46,7 @@ def query_symbol_details(symbol):
     response = requests.get(YAHOO_FINANCE_URL.format(symbol, FIELDS)).json()
     try:
         result = response['quoteResponse']['result'][0]
-        name = result['longName']
+        name = result['longName'] if ('longName' in result) else symbol
         state = result['marketState']
         price = get_price_for_market_state(state, result)
         return {
