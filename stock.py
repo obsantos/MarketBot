@@ -11,11 +11,20 @@ import requests
 
 YAHOO_FINANCE_URL = "https://query1.finance.yahoo.com/v7/finance/quote?formatted=true&symbols={0}&fields={1}"
 FIELDS = "regularMarketChangePercent%2CregularMarketChange%2CregularMarketPrice%2ClongName%2CshortName%2CmarketState%2CpostMarketChangePercent%2CpostMarketChange%2CpostMarketPrice%2CpreMarketChange%2CpreMarketPrice%2CpreMarketChangePercent"
+USER_AGENT="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.106 Safari/537.36"
 MARKET_STATE_REG = "REGULAR"
 MARKET_STATE_PRE = "PRE"
 MARKET_STATE_POST = "POST"
 MARKET_STATE_NIGHT = "POSTPOST"
 MARKET_STATE_CLOSED = "CLOSED"
+
+headers = {
+    'User-Agent': USER_AGENT
+}
+
+## Uncomment to debug
+# import http.client as http_client
+# http_client.HTTPConnection.debuglevel = 1
 
 def get_price_for_market_state(state, result):
     """Returns the price for the current state of the market"""
@@ -44,7 +53,7 @@ def get_price_for_market_state(state, result):
 
 def query_symbol_details(symbol):
     """Given a stock symbol query Yahoo Finance for details and returns a simplified object"""
-    response = requests.get(YAHOO_FINANCE_URL.format(symbol, FIELDS)).json()
+    response = requests.get(YAHOO_FINANCE_URL.format(symbol, FIELDS), headers=headers).json()
     try:
         result = response['quoteResponse']['result'][0]
         name = result['longName'] if ('longName' in result) else symbol
