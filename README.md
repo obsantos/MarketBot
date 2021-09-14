@@ -41,8 +41,13 @@ To use it just type any symbol prefixed by the `$` sign and the bot will reply w
 
 Like this:
 
-<img src="images/tsla.png" width="450"/>
-<img src="images/sbux.png" width="450"/>
+<img src="images/amc.png" width="450"/>
+<img src="images/aapl.png" width="450"/>
+
+It supports pre/post market notifications as well!
+
+<img src="images/gme.png" width="450"/>
+<img src="images/nvda.png" width="450"/>
 
 ### Hosting bot locally
 
