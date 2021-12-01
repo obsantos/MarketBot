@@ -29,7 +29,7 @@ headers = {
 # import http.client as http_client
 # http_client.HTTPConnection.debuglevel = 1
 
-def get_price_for_market_state_crypto(state, result):
+def get_price_for_market_state_crypto(result):
     """Returns the price for the current state of the market for Cryptocurrency symbols"""
     ## Crypto always on REGULAR market state, as it never sleeps ZZzzZZzzz...
     return {
@@ -39,19 +39,9 @@ def get_price_for_market_state_crypto(state, result):
         "percent": result['regularMarketChangePercent']['fmt']
     } 
 
-def get_price_for_market_state_etf(state, result):
-    """Returns the price for the current state of the market for ETF symbols"""
+def get_price_for_market_stateless(result):
+    """Returns the price for the symbols that the API doesnt follow the market state (ETF, Index)"""
     ## It seems that for ETF symbols it uses REGULAR market fields
-    return {
-        "current": result['regularMarketPrice']['fmt'],
-        "previous": result['regularMarketPreviousClose']['fmt'],
-        "change": result['regularMarketChange']['fmt'],
-        "percent": result['regularMarketChangePercent']['fmt']
-    }
-
-def get_price_for_market_state_index(state, result):
-    """Returns the price for the current state of the market for Index symbols"""
-    ## It seems that for Index symbols it uses REGULAR market fields
     return {
         "current": result['regularMarketPrice']['fmt'],
         "previous": result['regularMarketPreviousClose']['fmt'],
@@ -85,12 +75,10 @@ def get_price_for_market_state_equity(state, result):
 
 def get_price_for_market_state_by_quote_type(quoteType, state, result):
     """Returns the price for the current state of the market depending on the quote type"""
-    if quoteType == QUOTE_TYPE_INDEX:
-        return get_price_for_market_state_index(state, result)
-    elif quoteType == QUOTE_TYPE_ETF:
-        return get_price_for_market_state_etf(state, result)
+    if quoteType == QUOTE_TYPE_INDEX or quoteType == QUOTE_TYPE_ETF:
+        return get_price_for_market_stateless(result)
     elif quoteType == QUOTE_TYPE_CRYPTO:
-        return get_price_for_market_state_crypto(state, result)
+        return get_price_for_market_state_crypto(result)
     else: 
         return get_price_for_market_state_equity(state, result)
        

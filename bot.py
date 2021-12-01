@@ -48,10 +48,12 @@ def get_message_payload(channel_id, msg):
 def sanitize_message(msg):
     """Sanitizes the message removing possible http link formating"""
     http_prefix = "$<http://"
-    if msg.startswith(http_prefix):
-        index = msg.find("|")
-        return "$" + msg[len(http_prefix):index]
-    return msg
+    words = msg.split()
+    for i, word in enumerate(words):    
+        if word.startswith(http_prefix):
+            index = word.find("|")
+            words[i] = "$" + word[len(http_prefix):index]
+    return " ".join(words)
 
 def format_message(format, state, quoteType):
     """Modifies the formatting for the slack message based on the market state and thee quote type"""
@@ -161,7 +163,7 @@ def message(payload):
     ts = payload.get("event_time")
 
     if check_processed(ts) and text:
-        symbols = re.findall(r'\$\b[a-zA-Z.-]+\b', text)
+        symbols = re.findall(r'\$\^?\b[a-zA-Z.-]+\b', text)
         for symbol in symbols:            
             details = stock.query_symbol_details(symbol[1:])
             send_price_msg(channel_id, details)
